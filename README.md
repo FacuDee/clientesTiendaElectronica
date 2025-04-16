@@ -1,4 +1,4 @@
-# 🛒 TechGadget - Sistema de Gestión de Clientes
+# 🛒 Tienda Electrónica - Sistema de Gestión de Clientes
 
 ## 📝 Descripción
 Sistema full-stack para gestión de clientes de tienda electrónica con:
