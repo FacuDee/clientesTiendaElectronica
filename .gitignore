@@ -1,0 +1,5 @@
+# Archivos a ignorar
+backend/node_modules/  ← Ignora las dependencias de Node
+.env                   ← Ignora archivos con variables sensibles
+*.log                  ← Ignora archivos de log
+.DS_Store              ← Ignora archivos de sistema Mac
