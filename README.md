@@ -18,7 +18,7 @@ Sistema full-stack para gestión de clientes de tienda electrónica con:
    ```
 2. Configurar backend:
    ```bash
-   cd backend
+   cd backElectronica
    npm install
    ```
 3. Configurar base de datos (importar `database.sql`)
