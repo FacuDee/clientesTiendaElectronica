@@ -12,7 +12,11 @@ span {
 
 .table {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}                                                                    
+}      
+
+td {
+    cursor: pointer
+}
 
 #alert-container {
     z-index: 1100;

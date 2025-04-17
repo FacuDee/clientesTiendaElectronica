@@ -1,39 +1,45 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const db = require('../db');
+const db = require("../db");
 
-// GET /api/ventas?page=1&limit=10
-router.get('/ventas', async (req, res) => {
+// GET /api/ventas/:id/detalle
+router.get('/:id/detalle', async (req, res) => {
+    console.log(`Accediendo a detalle de venta ID: ${req.params.id}`);
     try {
-        const page = parseInt(req.query.page) || 1;  // Página actual (default: 1)
-        const limit = parseInt(req.query.limit) || 10; // Items por página (default: 10)
-        const offset = (page - 1) * limit; // Cálculo del offset
-
-        // Consulta con paginación
-        const [ventas] = await db.query(`
-            SELECT v.ID, c.Nombre AS Cliente, e.Nombre AS Empleado, v.Fecha
+        const [venta] = await db.query(`
+            SELECT v.*, e.Nombre AS EmpleadoNombre 
             FROM Ventas v
-            JOIN Clientes c ON v.ID_Cliente = c.ID
             JOIN Empleados e ON v.ID_Empleado = e.ID
-            LIMIT ? OFFSET ?
-        `, [limit, offset]);
+            WHERE v.ID = ?`, [req.params.id]);
+        
+        if (venta.length === 0) {
+            return res.status(404).json({ error: 'Venta no encontrada' });
+        }
 
-        // Contar total de ventas (para calcular total de páginas)
-        const [total] = await db.query('SELECT COUNT(*) AS total FROM Ventas');
-        const totalVentas = total[0].total;
+        const [detalle] = await db.query(`
+            SELECT 
+                dv.*, 
+                p.Nombre AS ProductoNombre,
+                CAST(dv.Precio_Unitario AS DECIMAL(10,2)) AS Precio_Unitario,
+                CAST(dv.Cantidad AS UNSIGNED) AS Cantidad
+            FROM Detalle_Ventas dv
+            JOIN Productos p ON dv.ID_Producto = p.ID
+            WHERE dv.ID_Venta = ?`, [req.params.id]);
+
+        // Formatear los datos numéricos
+        const detalleFormateado = detalle.map(item => ({
+            ...item,
+            Precio_Unitario: Number(item.Precio_Unitario),
+            Cantidad: Number(item.Cantidad)
+        }));
 
         res.json({
-            ventas,
-            paginacion: {
-                page,
-                limit,
-                totalItems: totalVentas,
-                totalPages: Math.ceil(totalVentas / limit)
-            }
+            venta: venta[0],
+            detalle: detalleFormateado
         });
     } catch (err) {
+        console.error('Error:', err);
         res.status(500).json({ error: err.message });
     }
 });
-
 module.exports = router;

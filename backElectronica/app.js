@@ -12,7 +12,7 @@ app.use(cors({
 app.use(express.json()); // Elimina el objeto de configuración que estaba aquí
 
 // Rutas
-app.use("/api", require("./routes/ventasRoutes"));
+app.use("/api/ventas", require("./routes/ventasRoutes"));
 app.use("/api/clientes", require("./routes/clientesRoutes"));
 
 // Cambia el puerto del backend (para evitar conflicto)
