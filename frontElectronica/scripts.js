@@ -72,6 +72,30 @@ document.addEventListener("DOMContentLoaded", () => {
       });
   };
 
+  // Función separada para agregar listeners
+  function addViewDetailsEventListeners() {
+    const rows = document.querySelectorAll("tr[data-id]");
+
+    rows.forEach((row) => {
+      // Clic izquierdo
+      row.addEventListener("click", (e) => {
+        if (!e.target.classList.contains("btn")) {
+          const clienteId = row.dataset.id;
+          window.location.href = `detalle-cliente.html?id=${clienteId}`;
+        }
+      });
+
+      // Clic central (rueda)
+      row.addEventListener("mousedown", (e) => {
+        if (e.button === 1 && !e.target.classList.contains("btn")) {
+          e.preventDefault();
+          const clienteId = row.dataset.id;
+          window.open(`detalle-cliente.html?id=${clienteId}`, "_blank");
+        }
+      });
+    });
+  }
+
   // Event listeners
   document.getElementById("search").addEventListener("input", (e) => {
     searchTerm = e.target.value;
@@ -145,19 +169,6 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("edit-telefono").value =
           cliente.telefono === "N/A" ? "" : cliente.telefono;
         new bootstrap.Modal(document.getElementById("editModal")).show();
-      });
-    });
-  };
-
-  // Agrega esta función después de addEditEventListeners y addDeleteEventListeners
-  const addViewDetailsEventListeners = () => {
-    document.querySelectorAll("tr[data-id]").forEach((row) => {
-      row.addEventListener("click", (e) => {
-        // Evitar que se active cuando se hace clic en los botones
-        if (!e.target.classList.contains("btn")) {
-          const clienteId = row.dataset.id;
-          window.location.href = `detalle-cliente.html?id=${clienteId}`;
-        }
       });
     });
   };

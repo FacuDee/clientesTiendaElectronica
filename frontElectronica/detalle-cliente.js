@@ -37,11 +37,8 @@ document.addEventListener("DOMContentLoaded", () => {
     // Cargar ventas del cliente
     const cargarVentas = async () => {
         try {
-            console.log(`Intentando cargar ventas para cliente ${clienteId}`); // Debug
             const response = await fetch(`http://localhost:3001/api/clientes/${clienteId}/ventas`);
-            
-            console.log('Respuesta recibida:', response); // Debug
-            
+                        
             if (!response.ok) {
                 if (response.status === 404) {
                     document.getElementById('ventas-table').innerHTML = `
@@ -55,7 +52,6 @@ document.addEventListener("DOMContentLoaded", () => {
             }
             
             const ventas = await response.json();
-            console.log('Datos de ventas recibidos:', ventas); // Debug
             
             const tableBody = document.getElementById('ventas-table');
             tableBody.innerHTML = '';
@@ -114,7 +110,6 @@ document.addEventListener("DOMContentLoaded", () => {
             }
             
             const { venta, detalle } = await response.json();
-            console.log('Datos detalle crudos:', { venta, detalle }); // Debug adicional
     
             // Actualizar el modal
             document.getElementById('venta-id').textContent = venta.ID;
